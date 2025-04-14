@@ -1,0 +1,20 @@
+[package]
+name = "xprocess"
+version = "0.0.1"
+edition = "2024"
+description = "Easily spawn child processes on Unix"
+categories = ["web-programming", "network-programming"]
+homepage = "https://github.com/LeoBorai/xprocess"
+repository = "https://github.com/LeoBorai/xprocess"
+readme = "README.md"
+keywords = ["process", "unix", "manage", "spawn"]
+license = "MIT OR Apache-2.0"
+authors = ["Leo Borai <estebanborai@gmail.com>"]
+
+[lib]
+name = "xprocess"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = "1.0"
+libc = "0.2"
