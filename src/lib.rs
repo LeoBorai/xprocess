@@ -5,6 +5,19 @@ use std::process::{Command, Stdio};
 use anyhow::{Result, bail};
 
 /// Reference of a system process spawned by [`Process::spawn`]
+///
+/// # Example
+///
+/// ```ignore
+/// use xprocess::Process;
+///
+/// fn main() {
+///    let process = Process::spawn("sleep").expect("Failed to spawn process");
+///    println!("Spawned process with PID: {}", process.pid());
+///    process.kill().expect("Failed to kill process");
+/// }
+/// ```
+///
 pub struct Process {
     pid: u32,
 }
