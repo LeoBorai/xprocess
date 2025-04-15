@@ -7,9 +7,8 @@
 
   [![Crates.io](https://img.shields.io/crates/v/xprocess.svg)](https://crates.io/crates/xprocess)
   [![Documentation](https://docs.rs/xprocess/badge.svg)](https://docs.rs/xprocess)
-  ![Build](https://github.com/LeoBorai/xprocess/workflows/build/badge.svg)
-  ![Clippy](https://github.com/LeoBorai/xprocess/workflows/clippy/badge.svg)
-  ![Formatter](https://github.com/LeoBorai/xprocess/workflows/fmt/badge.svg)
+  ![CI](https://github.com/LeoBorai/xprocess/workflows/ci/badge.svg)
+  ![Release](https://github.com/LeoBorai/xprocess/workflows/release/badge.svg)
 
 </div>
 
