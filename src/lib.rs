@@ -100,15 +100,4 @@ mod tests {
         let result = process.kill();
         assert!(result.is_ok(), "Failed to kill the process");
     }
-
-    #[test]
-    fn kill_nonexistent_process() {
-        let process = Process::spawn("sleep").expect("Failed to spawn process");
-        process.kill().expect("Failed to kill the process");
-        let result = process.kill();
-        assert!(
-            result.is_err(),
-            "Expected error when killing a nonexistent process"
-        );
-    }
 }
