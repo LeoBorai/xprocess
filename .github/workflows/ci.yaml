@@ -13,7 +13,7 @@ concurrency:
 jobs:
   checks:
     name: Integrity Checks
-    runs-on: ${{ matrix.os }
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
