@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -47,23 +47,13 @@ jobs:
 
       - name: Install Rust Binaries
         run: |
-          cargo binstall -y --force cargo-edit
+          cargo binstall -y --force cargo-tag
 
-      - id: cargo-set-version
-        name: Set Version
-        run: cargo set-version --bump ${{ inputs.version }}
-
-      - name: Set Crate Version as Environment Variable
-        run: |
-          CARGO_TOML_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/[\"]/, "", $2); printf("%s",$2) }' Cargo.toml)
-          echo "CRATE_VERSION=$CARGO_TOML_VERSION" >> $GITHUB_ENV
-
-      - name: Create Commit
+      - name: Bump Version
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "chore: bump version to v$CRATE_VERSION"
+          echo "CRATE_VERSION=$(cargo tag -p=v ${{ inputs.version }})" >> $GITHUB_ENV
           git push origin main --follow-tags
 
       - name: Login to Crates.io
@@ -75,11 +65,11 @@ jobs:
         run: cargo publish
 
       - name: Create Release
-        id: create_release
-        uses: actions/github-script@v5
-        with:
-          script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              tag_name: "v${{ env.CRATE_VERSION }}",
-              generate_release_notes: true
-            });
+        run: |
+          gh release create "$CRATE_VERSION" \
+            --title "$CRATE_VERSION" \
+            --draft=false \
+            --generate-notes \
+            --prerelease=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
