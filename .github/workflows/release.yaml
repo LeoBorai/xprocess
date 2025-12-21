@@ -1,4 +1,4 @@
-name: release
+name: Release
 
 on:
   workflow_dispatch:
@@ -16,7 +16,6 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
-  id-token: write
 
 jobs:
   publish-dry-run:
