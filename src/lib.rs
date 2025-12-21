@@ -115,4 +115,14 @@ mod tests {
         let result = process.kill();
         assert!(result.is_ok(), "Failed to kill the process");
     }
+
+    #[test]
+    fn spawn_process_with_args_different_types() {
+        let process = Process::spawn_with_args("sleep", [String::from("1")])
+            .expect("Failed to spawn process");
+        assert!(process.pid() > 0);
+        thread::sleep(Duration::from_millis(100));
+        let result = process.kill();
+        assert!(result.is_ok(), "Failed to kill the process");
+    }
 }
