@@ -1,6 +1,6 @@
 [package]
 name = "xprocess"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2024"
 description = "Easily spawn child processes on Unix"
 categories = ["web-programming", "network-programming"]
