@@ -24,22 +24,24 @@ pub struct Process {
 
 impl Process {
     pub fn spawn<S: AsRef<OsStr>>(cmd: S) -> Result<Self> {
-        let mut command = Self::build_command(cmd, []);
+        let mut command = Self::build_command::<S, _, S>(cmd, []);
         Self::spawn_child_process(&mut command)
     }
 
-    pub fn spawn_with_args<S, I>(cmd: S, args: I) -> Result<Self>
+    pub fn spawn_with_args<S, I, T>(cmd: S, args: I) -> Result<Self>
     where
-        I: IntoIterator<Item = S>,
+        T: AsRef<OsStr>,
+        I: IntoIterator<Item = T>,
         S: AsRef<OsStr>,
     {
         let mut command = Self::build_command(cmd, args);
         Self::spawn_child_process(&mut command)
     }
 
-    fn build_command<S, I>(cmd: S, args: I) -> Command
+    fn build_command<S, I, T>(cmd: S, args: I) -> Command
     where
-        I: IntoIterator<Item = S>,
+        T: AsRef<OsStr>,
+        I: IntoIterator<Item = T>,
         S: AsRef<OsStr>,
     {
         let mut command = Command::new(cmd);
@@ -108,6 +110,16 @@ mod tests {
     #[test]
     fn spawn_process_with_args() {
         let process = Process::spawn_with_args("sleep", ["1"]).expect("Failed to spawn process");
+        assert!(process.pid() > 0);
+        thread::sleep(Duration::from_millis(100));
+        let result = process.kill();
+        assert!(result.is_ok(), "Failed to kill the process");
+    }
+
+    #[test]
+    fn spawn_process_with_args_different_types() {
+        let process = Process::spawn_with_args("sleep", [String::from("1")])
+            .expect("Failed to spawn process");
         assert!(process.pid() > 0);
         thread::sleep(Duration::from_millis(100));
         let result = process.kill();
