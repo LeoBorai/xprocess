@@ -68,7 +68,7 @@ impl Process {
         let child_process = child.spawn()?;
         let pid = child_process.id();
 
-        Ok(Self { 
+        Ok(Self {
             pid,
             child: Some(child_process),
         })
@@ -92,12 +92,12 @@ impl Process {
     /// assert_eq!(output, "hello\n");
     /// ```
     pub fn stdout(&mut self) -> Result<String> {
-        if let Some(ref mut child) = self.child {
-            if let Some(ref mut stdout) = child.stdout {
-                let mut output = String::new();
-                stdout.read_to_string(&mut output)?;
-                return Ok(output);
-            }
+        if let Some(ref mut child) = self.child
+            && let Some(ref mut stdout) = child.stdout
+        {
+            let mut output = String::new();
+            stdout.read_to_string(&mut output)?;
+            return Ok(output);
         }
         Ok(String::new())
     }
@@ -115,12 +115,12 @@ impl Process {
     /// assert!(error.contains("No such file or directory"));
     /// ```
     pub fn stderr(&mut self) -> Result<String> {
-        if let Some(ref mut child) = self.child {
-            if let Some(ref mut stderr) = child.stderr {
-                let mut output = String::new();
-                stderr.read_to_string(&mut output)?;
-                return Ok(output);
-            }
+        if let Some(ref mut child) = self.child
+            && let Some(ref mut stderr) = child.stderr
+        {
+            let mut output = String::new();
+            stderr.read_to_string(&mut output)?;
+            return Ok(output);
         }
         Ok(String::new())
     }
@@ -179,8 +179,8 @@ mod tests {
 
     #[test]
     fn capture_stdout() {
-        let mut process = Process::spawn_with_args("echo", ["hello world"])
-            .expect("Failed to spawn process");
+        let mut process =
+            Process::spawn_with_args("echo", ["hello world"]).expect("Failed to spawn process");
         thread::sleep(Duration::from_millis(100));
         let stdout = process.stdout().expect("Failed to read stdout");
         assert_eq!(stdout.trim(), "hello world");
@@ -199,11 +199,9 @@ mod tests {
 
     #[test]
     fn capture_both_stdout_and_stderr() {
-        let mut process = Process::spawn_with_args(
-            "sh",
-            ["-c", "echo stdout message; echo stderr message >&2"],
-        )
-        .expect("Failed to spawn process");
+        let mut process =
+            Process::spawn_with_args("sh", ["-c", "echo stdout message; echo stderr message >&2"])
+                .expect("Failed to spawn process");
         thread::sleep(Duration::from_millis(100));
         let stdout = process.stdout().expect("Failed to read stdout");
         let stderr = process.stderr().expect("Failed to read stderr");
