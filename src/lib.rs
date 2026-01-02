@@ -81,15 +81,24 @@ impl Process {
 
     /// Reads and returns the stdout of the process
     ///
-    /// This method will consume the stdout handle and return all output as a String.
-    /// After calling this method, subsequent calls will return an empty String.
+    /// This method reads all available output from stdout and returns it as a String.
+    /// The method will block until the process closes its stdout stream.
+    /// 
+    /// **Important:** This method consumes the stdout handle. Subsequent calls will return 
+    /// an empty String.
+    ///
+    /// **Note:** For processes that produce output and then continue running, consider 
+    /// waiting for the process to finish or close stdout before calling this method, 
+    /// otherwise it may block indefinitely.
     ///
     /// # Example
     ///
     /// ```ignore
     /// let mut process = Process::spawn_with_args("echo", ["hello"]).expect("Failed to spawn");
+    /// // Wait for the process to finish writing
+    /// std::thread::sleep(std::time::Duration::from_millis(100));
     /// let output = process.stdout().expect("Failed to read stdout");
-    /// assert_eq!(output, "hello\n");
+    /// assert_eq!(output.trim(), "hello");
     /// ```
     pub fn stdout(&mut self) -> Result<String> {
         if let Some(ref mut child) = self.child
@@ -104,13 +113,22 @@ impl Process {
 
     /// Reads and returns the stderr of the process
     ///
-    /// This method will consume the stderr handle and return all output as a String.
-    /// After calling this method, subsequent calls will return an empty String.
+    /// This method reads all available output from stderr and returns it as a String.
+    /// The method will block until the process closes its stderr stream.
+    /// 
+    /// **Important:** This method consumes the stderr handle. Subsequent calls will return 
+    /// an empty String.
+    ///
+    /// **Note:** For processes that produce output and then continue running, consider 
+    /// waiting for the process to finish or close stderr before calling this method, 
+    /// otherwise it may block indefinitely.
     ///
     /// # Example
     ///
     /// ```ignore
     /// let mut process = Process::spawn_with_args("ls", ["/nonexistent"]).expect("Failed to spawn");
+    /// // Wait for the process to finish writing
+    /// std::thread::sleep(std::time::Duration::from_millis(100));
     /// let error = process.stderr().expect("Failed to read stderr");
     /// assert!(error.contains("No such file or directory"));
     /// ```
