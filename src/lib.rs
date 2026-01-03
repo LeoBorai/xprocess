@@ -83,12 +83,12 @@ impl Process {
     ///
     /// This method reads all available output from stdout and returns it as a String.
     /// The method will block until the process closes its stdout stream.
-    /// 
-    /// **Important:** This method consumes the stdout handle. Subsequent calls will return 
+    ///
+    /// **Important:** This method consumes the stdout handle. Subsequent calls will return
     /// an empty String.
     ///
-    /// **Note:** For processes that produce output and then continue running, consider 
-    /// waiting for the process to finish or close stdout before calling this method, 
+    /// **Note:** For processes that produce output and then continue running, consider
+    /// waiting for the process to finish or close stdout before calling this method,
     /// otherwise it may block indefinitely.
     ///
     /// # Example
@@ -115,12 +115,12 @@ impl Process {
     ///
     /// This method reads all available output from stderr and returns it as a String.
     /// The method will block until the process closes its stderr stream.
-    /// 
-    /// **Important:** This method consumes the stderr handle. Subsequent calls will return 
+    ///
+    /// **Important:** This method consumes the stderr handle. Subsequent calls will return
     /// an empty String.
     ///
-    /// **Note:** For processes that produce output and then continue running, consider 
-    /// waiting for the process to finish or close stderr before calling this method, 
+    /// **Note:** For processes that produce output and then continue running, consider
+    /// waiting for the process to finish or close stderr before calling this method,
     /// otherwise it may block indefinitely.
     ///
     /// # Example
